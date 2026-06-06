@@ -3,7 +3,7 @@ const Contact = require('../models/contactModel');
 
 const getAllContacts = asyncHandler(async (req, res) => {
     const contacts = await Contact.find();
-    res.status(200).send(contacts);
+    res.render("index", { contacts: contacts});
 });
 
 const createContact = asyncHandler(async (req, res, next) => {

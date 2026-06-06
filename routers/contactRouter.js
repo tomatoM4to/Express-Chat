@@ -6,6 +6,7 @@ const {
     updateContact,
     deleteContact
 } = require("../controllers/contactController");
+
 const router = express.Router();
 
 router.route("/")
