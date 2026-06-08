@@ -6,6 +6,10 @@ const getAllContacts = asyncHandler(async (req, res) => {
     res.render("index", { contacts: contacts});
 });
 
+const addContactForm = (req, res) => {
+    res.render("add");
+};
+
 const createContact = asyncHandler(async (req, res, next) => {
     const { name, email, phone } = req.body;
 
@@ -19,7 +23,8 @@ const createContact = asyncHandler(async (req, res, next) => {
         email,
         phone
     });
-    res.status(201).send(contact);
+    // res.status(201).send(contact);
+    res.redirect("/");
 });
 
 const getContact = asyncHandler(async (req, res, next) => {
@@ -29,7 +34,8 @@ const getContact = asyncHandler(async (req, res, next) => {
         error.status = 404;
         return next(error);
     }
-    res.status(200).send(contact);
+    // res.status(200).send(contact);
+    res.render("update", { contact: contact });
 });
 
 const updateContact = asyncHandler(async (req, res, next) => {
@@ -48,6 +54,7 @@ const updateContact = asyncHandler(async (req, res, next) => {
         return next(error);
     }
     res.status(200).send(updatedContent);
+    // res.redirect("/");
 });
 
 const deleteContact = asyncHandler(async (req, res, next) => {
@@ -60,7 +67,8 @@ const deleteContact = asyncHandler(async (req, res, next) => {
         return next(error);
     }
 
-    res.status(200).send({ message: "Contact deleted successfully" });
+    // res.status(200).send({ message: "Contact deleted successfully" });
+    res.redirect("/");
 });
 
 module.exports = {
@@ -68,5 +76,6 @@ module.exports = {
     createContact,
     getContact,
     updateContact,
-    deleteContact
+    deleteContact,
+    addContactForm
 };

@@ -4,13 +4,17 @@ const {
     createContact,
     getContact,
     updateContact,
-    deleteContact
+    deleteContact,
+    addContactForm
 } = require("../controllers/contactController");
 
 const router = express.Router();
 
 router.route("/")
-    .get(getAllContacts)
+    .get(getAllContacts);
+
+router.route("/add")
+    .get(addContactForm)
     .post(createContact);
 
 router.route("/:id")
