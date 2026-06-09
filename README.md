@@ -48,6 +48,12 @@ docker-compose up -d
 - **Username:** admin
 - **Password:** secret
 
+`.env` File 세팅
+
+```env
+MONGO_URI=mongodb://admin:secret@localhost:27017/myContacts?authSource=admin
+```
+
 ### 3. 환경 변수 설정 (.env)
 
 프로젝트 루트에 `.env` 파일을 생성하고 아래 내용을 입력합니다.

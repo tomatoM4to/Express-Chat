@@ -24,7 +24,7 @@ const createContact = asyncHandler(async (req, res, next) => {
         phone
     });
     // res.status(201).send(contact);
-    res.redirect("/");
+    res.redirect("/contacts");
 });
 
 const getContact = asyncHandler(async (req, res, next) => {
@@ -53,8 +53,8 @@ const updateContact = asyncHandler(async (req, res, next) => {
         error.status = 404;
         return next(error);
     }
-    res.status(200).send(updatedContent);
-    // res.redirect("/");
+    // res.status(200).send(updatedContent);
+    res.redirect("/contacts");
 });
 
 const deleteContact = asyncHandler(async (req, res, next) => {
@@ -68,7 +68,7 @@ const deleteContact = asyncHandler(async (req, res, next) => {
     }
 
     // res.status(200).send({ message: "Contact deleted successfully" });
-    res.redirect("/");
+    res.redirect("/contacts");
 });
 
 module.exports = {

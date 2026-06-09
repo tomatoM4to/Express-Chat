@@ -7,8 +7,13 @@ const {
     deleteContact,
     addContactForm
 } = require("../controllers/contactController");
+const cookieParser = require("cookie-parser");
+const checkLogin = require("../middleware/checkLogin");
 
 const router = express.Router();
+
+router.use(cookieParser());
+router.use(checkLogin);
 
 router.route("/")
     .get(getAllContacts);

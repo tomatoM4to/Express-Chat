@@ -14,7 +14,8 @@ dbConnect();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/", require("./routers/contactRouter"));
+app.use("/", require("./routers/loginRouter"));
+app.use("/contacts", require("./routers/contactRouter"));
 app.use(errorHandler);
 
 app.listen(3000, () => {
