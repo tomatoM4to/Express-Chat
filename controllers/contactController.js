@@ -1,8 +1,14 @@
 const asyncHandler = require('express-async-handler');
+const Contact = require('../models/contactModel');
 
 const getAllContacts = asyncHandler(async (req, res) => {
-    res.status(200).send("Get all contacts");
+    const contacts = await Contact.find();
+    res.render("index", { contacts: contacts});
 });
+
+const addContactForm = (req, res) => {
+    res.render("add");
+};
 
 const createContact = asyncHandler(async (req, res, next) => {
     const { name, email, phone } = req.body;
@@ -12,19 +18,57 @@ const createContact = asyncHandler(async (req, res, next) => {
         error.status = 400;
         return next(error);
     }
-    res.status(201).send("Contact created successfully");
+    const contact = await Contact.create({
+        name,
+        email,
+        phone
+    });
+    // res.status(201).send(contact);
+    res.redirect("/contacts");
 });
 
-const getContact = asyncHandler(async (req, res) => {
-    res.status(200).send("Get contact by id");
+const getContact = asyncHandler(async (req, res, next) => {
+    const contact = await Contact.findById(req.params.id);
+    if (!contact) {
+        const error = new Error("Contact not found");
+        error.status = 404;
+        return next(error);
+    }
+    // res.status(200).send(contact);
+    res.render("update", { contact: contact });
 });
 
-const updateContact = asyncHandler(async (req, res) => {
-    res.status(200).send("Update contact by id");
+const updateContact = asyncHandler(async (req, res, next) => {
+    const id = req.params.id;
+    const { name, email, phone } = req.body;
+
+    const updatedContent = await Contact.findByIdAndUpdate(
+        id,
+        { name, email, phone },
+        { new: true }
+    );
+
+    if (!updatedContent) {
+        const error = new Error("Contact not found");
+        error.status = 404;
+        return next(error);
+    }
+    // res.status(200).send(updatedContent);
+    res.redirect("/contacts");
 });
 
-const deleteContact = asyncHandler(async (req, res) => {
-    res.status(200).send("Delete contact by id");
+const deleteContact = asyncHandler(async (req, res, next) => {
+    const id = req.params.id;
+    const contact = await Contact.findByIdAndDelete(id);
+
+    if (!contact) {
+        const error = new Error("Contact not found");
+        error.status = 404;
+        return next(error);
+    }
+
+    // res.status(200).send({ message: "Contact deleted successfully" });
+    res.redirect("/contacts");
 });
 
 module.exports = {
@@ -32,5 +76,6 @@ module.exports = {
     createContact,
     getContact,
     updateContact,
-    deleteContact
+    deleteContact,
+    addContactForm
 };

@@ -4,12 +4,22 @@ const {
     createContact,
     getContact,
     updateContact,
-    deleteContact
+    deleteContact,
+    addContactForm
 } = require("../controllers/contactController");
+const cookieParser = require("cookie-parser");
+const checkLogin = require("../middleware/checkLogin");
+
 const router = express.Router();
 
+router.use(cookieParser());
+router.use(checkLogin);
+
 router.route("/")
-    .get(getAllContacts)
+    .get(getAllContacts);
+
+router.route("/add")
+    .get(addContactForm)
     .post(createContact);
 
 router.route("/:id")
