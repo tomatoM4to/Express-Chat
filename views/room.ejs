@@ -1,0 +1,94 @@
+<%- include('./include/_header') %>
+
+<main class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 rounded-4 overflow-hidden" style="height: 85vh;">
+        <!-- Room Header -->
+        <div class="card-header bg-white border-bottom p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <div class="bg-primary bg-opacity-10 p-2 rounded-circle me-3">
+                <i class="fa-solid fa-hashtag text-primary"></i>
+              </div>
+              <div>
+                <h5 class="fw-bold m-0"><%= room.name %></h5>
+                <small class="text-muted">Host: <%= room.owner.username %></small>
+              </div>
+            </div>
+            <a href="/rooms" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+              <i class="fa-solid fa-arrow-left me-1"></i> 나가기
+            </a>
+          </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div id="chat-box" class="card-body p-4 bg-light overflow-auto">
+          <% messages.forEach(msg => { %>
+            <div class="message <%= msg.sender._id.toString() === user.id ? 'sent' : 'received' %> mb-3 shadow-sm">
+              <strong><%= msg.sender.username %></strong>
+              <div class="content"><%= msg.content %></div>
+              <div class="time"><%= msg.createdAt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %></div>
+            </div>
+          <% }) %>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="card-footer bg-white border-top p-3">
+          <form id="chat-form">
+            <div class="input-group">
+              <input type="text" id="chat-input" class="form-control border-0 bg-light rounded-pill px-4 py-2" placeholder="메시지를 입력하세요..." required autocomplete="off">
+              <button type="submit" class="btn btn-primary rounded-pill ms-2 px-4 shadow-sm">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const roomId = "<%= room._id %>";
+  const userId = "<%= user.id %>";
+  const username = "<%= user.username %>";
+
+  const chatBox = document.getElementById('chat-box');
+  const chatForm = document.getElementById('chat-form');
+  const chatInput = document.getElementById('chat-input');
+
+  // Join the room
+  socket.emit('joinRoom', roomId);
+
+  // Scroll to bottom
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const content = chatInput.value;
+    if (content) {
+      socket.emit('chatMessage', { roomId, userId, username, content });
+      chatInput.value = '';
+    }
+  });
+
+  socket.on('message', (msg) => {
+    const isMe = msg.username === username;
+    const msgElement = document.createElement('div');
+    msgElement.className = `message ${isMe ? 'sent' : 'received'} mb-3 shadow-sm`;
+    
+    msgElement.innerHTML = `
+      <strong>${msg.username}</strong>
+      <div class="content">${msg.content}</div>
+      <div class="time">${new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+    `;
+    
+    chatBox.appendChild(msgElement);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+</script>
+
+<%- include('./include/_footer') %>

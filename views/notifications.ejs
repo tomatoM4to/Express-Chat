@@ -1,0 +1,45 @@
+<%- include('./include/_header') %>
+
+<main class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
+          <h2 class="fw-bold mb-4 pb-3 border-bottom">
+            <i class="fa-solid fa-at text-primary me-2"></i>나를 언급한 메시지
+          </h2>
+
+          <div class="list-group list-group-flush">
+            <% if (notifications.length === 0) { %>
+              <div class="text-center py-5">
+                <i class="fa-solid fa-bell-slash fa-3x text-light-emphasis mb-3"></i>
+                <p class="text-muted">아직 언급된 내역이 없습니다.</p>
+              </div>
+            <% } %>
+            <% notifications.forEach(notif => { %>
+              <div class="list-group-item list-group-item-action border-0 mb-3 rounded-3 shadow-sm <%= notif.isRead ? 'bg-light' : 'border-start border-primary border-4' %>">
+                <div class="d-flex w-100 justify-content-between align-items-center mb-2">
+                  <h6 class="fw-bold m-0 text-primary">
+                    <i class="fa-solid fa-user me-2"></i><%= notif.sender ? notif.sender.username : '알 수 없는 유저' %>
+                  </h6>
+                  <small class="text-muted"><%= notif.createdAt.toLocaleString() %></small>
+                </div>
+                <p class="mb-2 text-dark fst-italic">"<%= notif.messageContent %>"</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="text-muted">
+                    <i class="fa-solid fa-hashtag me-1"></i><%= notif.room ? notif.room.name : '삭제된 방' %>
+                  </small>
+                  <% if (notif.room) { %>
+                    <a href="/rooms/<%= notif.room._id %>" class="btn btn-sm btn-outline-primary rounded-pill px-3">이동하기</a>
+                  <% } %>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('./include/_footer') %>

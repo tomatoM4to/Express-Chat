@@ -1,0 +1,69 @@
+<%- include('./include/_header') %>
+
+<main class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="fw-bold m-0 text-dark">채팅방 목록</h2>
+        <span class="badge bg-primary rounded-pill px-3 py-2"><%= rooms.length %>개의 활성 방</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4 bg-primary bg-opacity-10 rounded">
+      <h5 class="fw-bold mb-3"><i class="fa-solid fa-plus-circle me-2 text-primary"></i>새 채팅방 만들기</h5>
+      <form action="/rooms" method="POST" class="row g-2">
+        <div class="col-md-9">
+          <input type="text" name="name" class="form-control form-control-lg border-0 shadow-sm" placeholder="방 이름을 입력하세요" required>
+        </div>
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm fw-bold">개설하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <% if (rooms.length === 0) { %>
+      <div class="col-12 w-100">
+        <div class="text-center py-5 bg-white rounded shadow-sm">
+          <i class="fa-solid fa-ghost fa-3x text-muted mb-3"></i>
+          <p class="text-muted">아직 개설된 방이 없습니다. 첫 번째 방을 만들어보세요!</p>
+        </div>
+      </div>
+    <% } %>
+    <% rooms.forEach(room => { %>
+      <div class="col">
+        <div class="card h-100 shadow-sm border-0 hover-shadow transition">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <h5 class="card-title fw-bold m-0"><%= room.name %></h5>
+              <i class="fa-solid fa-comments text-primary opacity-50"></i>
+            </div>
+            <p class="card-text small text-muted mb-4">
+              <i class="fa-solid fa-user-pen me-1"></i> 개설자: <%= room.owner.username %>
+            </p>
+            <div class="d-flex gap-2 mt-auto">
+              <a href="/rooms/<%= room._id %>" class="btn btn-primary flex-grow-1 fw-bold">입장하기</a>
+              <% if (room.owner._id.toString() === user.id) { %>
+                <form action="/rooms/<%= room._id %>?_method=DELETE" method="POST">
+                  <button type="submit" class="btn btn-outline-danger" onclick="return confirm('방을 삭제하시겠습니까?')">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</main>
+
+<style>
+  .transition { transition: all 0.3s ease; }
+  .hover-shadow:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+</style>
+
+<%- include('./include/_footer') %>
