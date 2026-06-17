@@ -1,4 +1,4 @@
-# 🚀 Gemini Chat (Technical Documentation)
+# 🚀 tomatoM4to Chat (Technical Documentation)
 
 본 프로젝트는 JWT 인증, MongoDB 영속성, 그리고 Socket.io를 활용한 실시간 멘션 기능을 포함한 모단한 채팅 애플리케이션입니다.
 
@@ -56,7 +56,7 @@
 *   **loginController**: 로그인/회원가입 폼 렌더링, `password-validator`를 이용한 유효성 검사, JWT 발급 및 쿠키 설정.
 *   **roomController**: 방 목록 조회, 방 생성/삭제 권한 검증 및 데이터 처리.
 *   **profileController**: 사용자 채팅 이력 집계, 비밀번호 변경(Bcrypt 대조), 계정 탈퇴 시 관련 데이터(메시지, 알림, 방) 연쇄 삭제 처리.
-*   **notificationController**: 자신에게 온 멘션 목록 조회 및 읽음 상태 업데이트.
+*   **notificationController**: 자신에게 온 멘션 목록 조회, 읽음 상태 업데이트 및 개별 알림 삭제 처리.
 
 ---
 
@@ -95,3 +95,4 @@
     *   `room.ejs`: 실시간 채팅 인터페이스 및 메시지 버블.
     *   `profile.ejs`: 탭 구조의 채팅 기록 및 계정 설정.
     *   `notifications.ejs`: 멘션 히스토리 목록.
+otifications.ejs`: 멘션 히스토리 목록.
